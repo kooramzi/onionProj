@@ -17,12 +17,12 @@ import Main.OnionMain;
 
 public class login implements ActionListener  {
 
-	private userDAO dao;
+	private loginDAO dao;
 	private TextField tfmsg;
 	private TextField id,pw;
 
 	public login() {
-		dao = new userDAO();
+		dao = new loginDAO();
 		JFrame f = new JFrame("어니언 - 로그인");
 		f.setSize(900, 700);
 		f.setLocationRelativeTo(null);
@@ -37,6 +37,7 @@ public class login implements ActionListener  {
 		id = new TextField(10);
 		id.setBounds(429, 512, 145, 23);
 		panel_1.add(id);
+		
 		
 		JLabel lid = new JLabel("ID :", Label.RIGHT);
 		lid.setBounds(392, 512, 32, 23);
@@ -117,9 +118,7 @@ public class login implements ActionListener  {
 		} 
 
 	
-	/**
-	 * @wbp.parser.entryPoint
-	 */
+	
 	public static void main(String[] args) {
 		new login();
 	}

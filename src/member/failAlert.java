@@ -12,21 +12,11 @@ import javax.swing.SwingConstants;
 public class failAlert {
 	private JFrame frame;
 
-	/**
-	 * Launch the application.
-	 */
-	
 
-	/**
-	 * Create the application.
-	 */
 	public failAlert() {
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 308, 174);
