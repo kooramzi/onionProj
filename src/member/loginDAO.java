@@ -24,16 +24,16 @@ public class loginDAO {
          
          String query = "SELECT * FROM member WHERE id='" + p.getId()
          + "' AND password='" + p.getPassword() + "'";
-         System.out.println("SQL : " + query);
+//         System.out.println("SQL : " + query);
          rs = stmt.executeQuery(query);
          rs.last();
-         System.out.println("rs.getRow() : " + rs.getRow());
+//         System.out.println("rs.getRow() : " + rs.getRow());
          
-         if(rs.getRow() == 0) {
-            System.out.println("0 row selected...");
-         }else {
-            return true;
-         }
+//         if(rs.getRow() == 0) {
+//            System.out.println("0 row selected...");
+//         }else {
+//            return true;
+//         }
          
       }catch(Exception e) {
          e.printStackTrace();

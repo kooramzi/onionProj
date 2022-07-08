@@ -13,18 +13,20 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JTextField;
 
-public class OnionMain {
+public class OnionMain3 {
 
 	private JFrame frame;
 	private JTable calTable;
 	private JTable subTable;
 	private JTable livTable;
 	private subscriptionDAO dao;
-	private JTable table;
-	private JPanel calPanel;
+	
+	JTable table;
+	JPanel calPanel;
 	private JPanel calPanel_1;
 	private JTextField totalTextField;
 
@@ -32,7 +34,7 @@ public class OnionMain {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					OnionMain window = new OnionMain();
+					OnionMain3 window = new OnionMain3();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -41,13 +43,13 @@ public class OnionMain {
 		});
 	}
 
-	public OnionMain() {
+	public OnionMain3() {
 		initialize();
-	}
+//		dao = new subscriptionDAO();
+	
 
 	private void initialize() {
 		
-		dao = new subscriptionDAO(); 
 		frame = new JFrame();
 		frame.getContentPane().setBackground(Color.WHITE);
 		frame.setBounds(100, 100, 900, 700);
@@ -55,6 +57,7 @@ public class OnionMain {
 		frame.getContentPane().setLayout(null);
 		frame.setLocationRelativeTo(null);
 		
+//		calPanel = new JPanel();
 		calPanel_1 = new JPanel();
 		calPanel_1.setBounds(12, 10, 363, 641);
 		frame.getContentPane().add(calPanel_1);
@@ -101,9 +104,10 @@ public class OnionMain {
 		
 		calTable = new JTable();
 		calScrollPane.setViewportView(calTable);
-		calScrollPane.add(calTable);
+		calScrollPane.add(calTable,"center");
 		calTable.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 		calTable.setFillsViewportHeight(true);//컨테이너의 전체 높이를 테이블이 전부 사용하도록 설정
+		
 		frame.getContentPane().add(calPanel_1);
 		
 		totalTextField = new JTextField();
@@ -111,7 +115,6 @@ public class OnionMain {
 		calPanel_1.add(totalTextField);
 		totalTextField.setColumns(10);
 //		showCal();
-		
 		
 		JPanel subPanel = new JPanel();
 		subPanel.setBounds(387, 10, 485, 315);
@@ -137,14 +140,29 @@ public class OnionMain {
 		subScrollPane.setBounds(12, 67, 461, 238);
 		subPanel.add(subScrollPane);
 		
-		
 	
+		
+		
 		String[] sHeader = new String[] {"번호","구분","항목"};
-		String[][] sContents = dao.selectSub(new subscriptionVo());
+		Object[][] sContents;
 		subTable = new JTable(sContents,sHeader);
+		subTable.setRowHeight(2);
+		subTable.setModel(new DefaultTableModel(
+			for(int i =0; i<dao.size(); i++) {
+				for(int j=0; j<4;j++) {
+					sContents[i][j]=dao.get(i).getSid();
+					sContents[i][++j]=dao.get(i).getCategory();
+					sContents[i][++j]=dao.get(i).getTitle();
+				}
+			}
+			
+		));
+		
 		subScrollPane.setViewportView(subTable);
 		
 	
+		
+		
 		JPanel livPanel = new JPanel();
 		livPanel.setBounds(387, 335, 485, 315);
 		frame.getContentPane().add(livPanel);
@@ -170,7 +188,13 @@ public class OnionMain {
 		livPanel.add(livScrollPane);
 		
 		livTable = new JTable();
-		
+		livTable.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"\uBC88\uD638", "\uAD6C\uBD84", "\uD56D\uBAA9"
+			}
+		));
 		
 		
 		livScrollPane.setViewportView(livTable);

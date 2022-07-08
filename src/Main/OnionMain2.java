@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.table.DefaultTableModel;
 
 public class OnionMain {
@@ -22,12 +22,11 @@ public class OnionMain {
 	private JTable calTable;
 	private JTable subTable;
 	private JTable livTable;
-	private subscriptionDAO dao;
-	private JTable table;
-	private JPanel calPanel;
+	
+	JPanel calPanel;
 	private JPanel calPanel_1;
-	private JTextField totalTextField;
 
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -41,13 +40,12 @@ public class OnionMain {
 		});
 	}
 
+
 	public OnionMain() {
 		initialize();
 	}
 
 	private void initialize() {
-		
-		dao = new subscriptionDAO(); 
 		frame = new JFrame();
 		frame.getContentPane().setBackground(Color.WHITE);
 		frame.setBounds(100, 100, 900, 700);
@@ -55,28 +53,31 @@ public class OnionMain {
 		frame.getContentPane().setLayout(null);
 		frame.setLocationRelativeTo(null);
 		
+//		calPanel = new JPanel();
 		calPanel_1 = new JPanel();
 		calPanel_1.setBounds(12, 10, 363, 641);
 		frame.getContentPane().add(calPanel_1);
 		calPanel_1.setLayout(null);
 		
 	
-		JButton show_tb = new JButton("SHOW");
-//		JToggleButton hide_tb = new JToggleButton("HIDE");
+		JToggleButton show_tb = new JToggleButton("SHOW");
+		JToggleButton hide_tb = new JToggleButton("HIDE");
 
 //		show_tb.setVisible(true);
 //		hide_tb.setVisible(false);
 
 		show_tb.setFont(new Font("굴림", Font.PLAIN, 5));
-		show_tb.setBounds(304, 140, 47, 23);
-		show_tb.setToolTipText("금액 보이기");
-//		hide_tb.setFont(new Font("굴림", Font.PLAIN, 5));
-//		hide_tb.setBounds(319, 140, 32, 23);
-//		hide_tb.setToolTipText("금액 숨기기");
+		hide_tb.setFont(new Font("굴림", Font.PLAIN, 5));
+		show_tb.setBounds(283, 140, 32, 23);
+		hide_tb.setBounds(319, 140, 32, 23);
 
+		show_tb.setToolTipText("금액 보이기");
+		hide_tb.setToolTipText("금액 숨기기");
 
 		calPanel_1.add(show_tb);
-//		calPanel_1.add(hide_tb);
+		calPanel_1.add(hide_tb);
+	
+		
 	
 		
 		JLabel callb = new JLabel("\uC774\uBC88\uB2EC \uC9C0\uCD9C\uCD1D\uC561");
@@ -86,7 +87,7 @@ public class OnionMain {
 		
 		JButton calMoreBtn = new JButton(">");
 		calMoreBtn.setBorderPainted(false);
-		calMoreBtn.setFont(new Font("굴림", Font.BOLD, 15));
+		calMoreBtn.setFont(new Font("굴림", Font.BOLD, 20));
 		calMoreBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -104,14 +105,9 @@ public class OnionMain {
 		calScrollPane.add(calTable);
 		calTable.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 		calTable.setFillsViewportHeight(true);//컨테이너의 전체 높이를 테이블이 전부 사용하도록 설정
+		
 		frame.getContentPane().add(calPanel_1);
-		
-		totalTextField = new JTextField();
-		totalTextField.setBounds(28, 72, 254, 56);
-		calPanel_1.add(totalTextField);
-		totalTextField.setColumns(10);
 //		showCal();
-		
 		
 		JPanel subPanel = new JPanel();
 		subPanel.setBounds(387, 10, 485, 315);
@@ -125,7 +121,7 @@ public class OnionMain {
 		
 		JButton subMoreBtn = new JButton(">");
 		subMoreBtn.setBorderPainted(false);
-		subMoreBtn.setFont(new Font("굴림", Font.BOLD, 15));
+		subMoreBtn.setFont(new Font("굴림", Font.BOLD, 20));
 		subMoreBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -138,13 +134,21 @@ public class OnionMain {
 		subPanel.add(subScrollPane);
 		
 		
-	
-		String[] sHeader = new String[] {"번호","구분","항목"};
-		String[][] sContents = dao.selectSub(new subscriptionVo());
-		subTable = new JTable(sContents,sHeader);
+		subTable = new JTable();
+		subTable.setFillsViewportHeight(true);//컨테이너의 전체 높이를 테이블이 전부 사용하도록 설정
+		subTable.setRowHeight(2);
+		subTable.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"\uBC88\uD638", "\uAD6C\uBD84", "\uD56D\uBAA9"
+			}
+		));
 		subScrollPane.setViewportView(subTable);
 		
 	
+		
+		
 		JPanel livPanel = new JPanel();
 		livPanel.setBounds(387, 335, 485, 315);
 		frame.getContentPane().add(livPanel);
@@ -157,7 +161,7 @@ public class OnionMain {
 		
 		JButton livMoreBtn = new JButton(">");
 		livMoreBtn.setBorderPainted(false);
-		livMoreBtn.setFont(new Font("굴림", Font.BOLD, 15));
+		livMoreBtn.setFont(new Font("굴림", Font.BOLD, 20));
 		livMoreBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -170,7 +174,14 @@ public class OnionMain {
 		livPanel.add(livScrollPane);
 		
 		livTable = new JTable();
-		
+		livTable.setFillsViewportHeight(true);//컨테이너의 전체 높이를 테이블이 전부 사용하도록 설정
+		livTable.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"\uBC88\uD638", "\uAD6C\uBD84", "\uD56D\uBAA9"
+			}
+		));
 		
 		
 		livScrollPane.setViewportView(livTable);
@@ -178,4 +189,7 @@ public class OnionMain {
 		frame.setVisible(true);
 		
 	}
-}
+	}
+
+
+

@@ -7,8 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class MemberDAO {
 //	DAO)자바 프로그램에서 데이터베이스 작업만 수행하는 클래스
@@ -48,32 +47,6 @@ public class MemberDAO {
 		}
 	}
 
-	// Select
-//	public List<MemberVo> selectMemberAll() {
-//		Connection conn = null; // db연결
-//		PreparedStatement pstmt = null; // 쿼리문 수행
-//		ResultSet rs = null; // 검색결과 레코드 저장
-//		String sql = null;
-//		List<MemberVo> result = new ArrayList<>();
-//
-//		try {
-//			conn = util.getConnection();
-//			System.out.println("접속성공!");
-//			pstmt = conn.prepareStatement(sql);
-//			rs = pstmt.executeQuery();
-//
-//			sql = "select * from member";
-//
-//			while (rs.next()) {
-//				MemberVo vo = new MemberVo(rs.getString(1), rs.getString(2), rs.getString(3), rs.getInt(4));
-//			}
-//
-//			result.add(vo);
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-//		return result;
-//	}
 
 	public MemberVo selectMember(String string) {
 		Connection conn = null; // db연결

@@ -1,18 +1,23 @@
-package subscription;
+package Main;
 
 public class subscriptionVo {
-	private int sid;
+	private String sid;
 	private String category;
 	private String title;
 	
-	public subscriptionVo(int sid,String category,String title) {
+	
+	public subscriptionVo() {
+		
+	}
+	
+	public subscriptionVo(String sid,String category,String title) {
 		this.sid = sid;
 		this.category = category;
 		this.title = title;
 		
 	}
 
-	public int getSid() {
+	public String getSid() {
 		return sid;
 	}
 
