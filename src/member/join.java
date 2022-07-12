@@ -33,7 +33,7 @@ public class join {
 	private void initialize() {
 		memberdao = new MemberDAO();
 		frame = new JFrame();
-		frame.setBounds(100, 100, 410, 514);
+		frame.setBounds(100, 100, 409, 417);
 		frame.setLocationRelativeTo(null);
 //		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.addWindowListener(new WindowAdapter() {
@@ -49,6 +49,10 @@ public class join {
 		joinlb.setBounds(59, 23, 292, 52);
 		frame.getContentPane().add(joinlb);
 
+		JLabel idlb = new JLabel("ID");
+		idlb.setBounds(71, 102, 110, 29);
+		frame.getContentPane().add(idlb);
+		
 		JLabel pwlb = new JLabel("PW");
 		pwlb.setBounds(71, 140, 110, 29);
 		frame.getContentPane().add(pwlb);
@@ -58,12 +62,9 @@ public class join {
 		frame.getContentPane().add(namelb);
 
 		JLabel pnlb = new JLabel("PHONE NUMBER");
-		pnlb.setBounds(71, 338, 110, 29);
+		pnlb.setBounds(69, 255, 110, 29);
 		frame.getContentPane().add(pnlb);
 
-		JLabel idlb = new JLabel("ID");
-		idlb.setBounds(71, 102, 110, 29);
-		frame.getContentPane().add(idlb);
 
 		tfid = new JTextField();
 		tfid.setBounds(205, 102, 132, 21);
@@ -81,7 +82,7 @@ public class join {
 		tfname.setColumns(10);
 
 		tfpn = new JTextField();
-		tfpn.setBounds(205, 338, 132, 21);
+		tfpn.setBounds(203, 255, 132, 21);
 		frame.getContentPane().add(tfpn);
 		tfpn.setColumns(10);
 
@@ -94,7 +95,7 @@ public class join {
 		JButton joinBtn = new JButton("JOIN");
 		joinBtn.setForeground(Color.WHITE);
 		joinBtn.setBackground(Color.BLACK);
-		joinBtn.setBounds(154, 399, 97, 23);
+		joinBtn.setBounds(154, 313, 97, 23);
 		frame.getContentPane().add(joinBtn);
 
 		JLabel pwlb_check = new JLabel("PW(CHECK)");

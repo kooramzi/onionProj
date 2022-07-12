@@ -19,7 +19,6 @@ public class MemberDAO {
 		util = JdbcConnectionUtil.getInstance();
 	}
 
-	// Insert
 	public void insertMember(MemberVo vo) {
 		Connection conn = null; // db연결
 		PreparedStatement pstmt = null; // 쿼리문 수행
@@ -48,30 +47,30 @@ public class MemberDAO {
 	}
 
 
-	public MemberVo selectMember(String string) {
-		Connection conn = null; // db연결
-		PreparedStatement pstmt = null; // 쿼리문 수행
-		ResultSet rs = null; // 검색결과 레코드 저장
-		String sql = null;
-		MemberVo result = null;
-
-		try {
-			conn = util.getConnection();
-			System.out.println("접속성공!");
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, string);
-			rs = pstmt.executeQuery();
-
-			sql = "select * from member where ?";
-
-			while (rs.next()) {
-				result = new MemberVo(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4));
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
+//	public MemberVo selectMember(String string) {
+//		Connection conn = null; // db연결
+//		PreparedStatement pstmt = null; // 쿼리문 수행
+//		ResultSet rs = null; // 검색결과 레코드 저장
+//		String sql = null;
+//		MemberVo result = null;
+//
+//		try {
+//			conn = util.getConnection();
+//			System.out.println("접속성공!");
+//			pstmt = conn.prepareStatement(sql);
+//			pstmt.setString(1, string);
+//			rs = pstmt.executeQuery();
+//
+//			sql = "select * from member where ?";
+//
+//			while (rs.next()) {
+//				result = new MemberVo(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4));
+//			}
+//
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		return result;
+//	}
 
 }

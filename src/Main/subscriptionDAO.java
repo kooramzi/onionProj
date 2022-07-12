@@ -16,8 +16,6 @@ public class subscriptionDAO {
 		util = JdbcConnectionUtil.getInstance();
 	}
 
-
-	@SuppressWarnings("null")
 	public String[][] selectSub(subscriptionVo subVo) {
 		Connection con = null;
 		PreparedStatement pstmt = null; // 쿼리문사용을위한
@@ -55,31 +53,43 @@ public class subscriptionDAO {
 		return sContents;
 
 	}
+	
+	
+	public String[][] selectLiv(subscriptionVo subVo) {
+		Connection con = null;
+		PreparedStatement pstmt = null; // 쿼리문사용을위한
+		ResultSet rs = null; // 셀렉트문의 결과는 Resultset으로 옴
+		String sql=null;
+		List<subscriptionVo> result = new ArrayList<>();
+		String[][] lContents = null;
 
-//	public void show_subscription() {
-//		ArrayList<subscriptionVo> list = subList();
-//		DefaultTableModel model = (DefaultTableModel) subTable.getModel();
-//		Object[] row = new Object[3];
-//		for (int i = 0; i < list.size(); i++) {
-//			row[0] = list.get(i).getSid();
-//			row[1] = list.get(i).getCategory();
-//			row[2] = list.get(i).getTitle();
-//			model.addRow(row);
-//
-//		}
-//	}
+		try {
+			con = util.getConnection();
+			System.out.println("접속성공!");
 
-//	public void connDB() {
-//		try {
-//			Class.forName(driver);
-//			System.out.println("jdbc driver loading success.");
-//			con = DriverManager.getConnection(url, user, password);
-//			System.out.println("oracle connection success.\n");
-//			pstmt =  con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
-//					ResultSet.CONCUR_UPDATABLE);
-//			System.out.println("statement create success.\n");
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
+			sql = "SELECT * FROM subscription where CATEGORY='생활지출'";
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			
+			while (rs.next()) {
+				subVo = new subscriptionVo(rs.getString("sid"), rs.getString("category"),
+														rs.getString("title"));
+				result.add(subVo);
+			}
+
+			lContents = new String[result.size()][3];
+			for (int i = 0; i < result.size(); i++) {
+				for (int j = 0; j < 3; j++) {
+					lContents[i][j] = result.get(i).getSid();
+					lContents[i][++j] = result.get(i).getCategory();
+					lContents[i][++j] = result.get(i).getTitle();
+				}
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return lContents;
+
+	}
 }

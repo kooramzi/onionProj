@@ -33,7 +33,7 @@ public class JdbcConnectionUtil {
 		return DriverManager.getConnection(url, user, password);
 	}
 	
-	public void close(ResultSet rs ) {
+	public void close(ResultSet rs) {
 		if(rs!=null) {
 			try {
 				rs.close();
@@ -43,7 +43,7 @@ public class JdbcConnectionUtil {
 		}
 	}
 	
-	public void close(Statement stmt ) {
+	public void close(Statement stmt) {
 		if(stmt!=null) {
 			try {
 				stmt.close();
@@ -52,7 +52,7 @@ public class JdbcConnectionUtil {
 			}
 		}
 	}
-	public void close(Connection con ) {
+	public void close(Connection con) {
 		if(con!=null) {
 			try {
 				con.close();
