@@ -5,8 +5,7 @@ public class MemberVo {
 	
 		private String id;
 		private String pw;
-		private String name;
-//		private String birth;	
+		private String name;	
 		private String pnum;
 		
 		
@@ -17,7 +16,6 @@ public class MemberVo {
 		this.id = id;
 		this.pw = pw;
 		this.name = name;
-//		this.birth = birth;	
 		this.pnum = pnum;
 	}
 	
@@ -35,11 +33,6 @@ public class MemberVo {
 		
 	}
 	
-//	public String getBirth() {
-//		return birth;
-//		
-//	}
-
 	public String getPnum() {
 		return pnum;
 		
@@ -59,11 +52,6 @@ public class MemberVo {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-
-//	public void setBirth(String birth) {
-//		this.birth = birth;
-//	}
 
 
 	public void setPnum(String pnum) {

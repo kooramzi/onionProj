@@ -1,7 +1,9 @@
 package Main;
 
+import java.awt.BorderLayout;
+import java.awt.Button;
+import java.awt.Choice;
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -9,34 +11,31 @@ import java.awt.Label;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.Vector;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.SwingConstants;
 
-import calendar.buttonCal;
+public class OnionMain implements MouseListener, ActionListener {
 
-import java.awt.BorderLayout;
-import java.awt.Button;
-import java.awt.Choice;
-
-public class OnionMain {
-
-	private JFrame frame;
+	JFrame frame;
 	private JTable subTable;
 	private JTable livTable;
 	private subscriptionDAO dao;
 	private JTable table;
 	private JPanel calPanel;
 	private JPanel calPanel_1;
-	private JTextField totalTextField;
+	private JLabel printTotal;
 	private Panel yearmenu = null;
 	private Panel daymenu = null;
 	private Choice choice = null;
@@ -46,29 +45,20 @@ public class OnionMain {
 	private Button[] bt2 = new Button[42];
 	private int year=0;
 	private int month=0;
+	private int totalfee = 0;
+	private ArrayList <subscriptionVo> list;
+	private Vector<Object> vector;
+	private DefaultTableModel model;
+	private DefaultTableModel model1;
+	private int totalFee;
+	static String paydate;
 
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					OnionMain window = new OnionMain();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+	 new OnionMain();
 		 
 	}
 
-	public OnionMain() {
-		initialize();
-		new buttonCal();
-	
-	}
-
-	private void initialize() {
-		
+	public OnionMain()  {
 		dao = new subscriptionDAO(); 
 		frame = new JFrame();
 		frame.getContentPane().setBackground(Color.WHITE);
@@ -78,46 +68,53 @@ public class OnionMain {
 		frame.setLocationRelativeTo(null);
 		
 		calPanel_1 = new JPanel();
+		calPanel_1.setBackground(Color.WHITE);
 		calPanel_1.setBounds(12, 10, 363, 641);
 		frame.getContentPane().add(calPanel_1);
 		calPanel_1.setLayout(null);
 		
-		totalTextField = new JTextField();
-		totalTextField.setBounds(28, 72, 254, 56);
-		calPanel_1.add(totalTextField);
-		totalTextField.setColumns(10);
-		totalTextField.setEditable(false);	
 		
-		JButton show_tb = new JButton("SHOW");
-		show_tb.addActionListener(new ActionListener() {
+		printTotal = new JLabel(Integer.toString(dao.totalFee(new subscriptionVo())));
+		printTotal.setHorizontalAlignment(SwingConstants.RIGHT);
+		printTotal.setBounds(28, 72, 192, 56);
+		printTotal.setVerticalTextPosition(0); //center
+		printTotal.setHorizontalTextPosition(SwingConstants.RIGHT); //left
+		printTotal.setFont(new Font("arial", Font.ITALIC, 50));
+		calPanel_1.add(printTotal);
+		
+		
+		
+		JButton show_bt = new JButton("금액숨기기");
+		show_bt.setBorderPainted(false);
+		show_bt.setContentAreaFilled(false);
+		show_bt.setFocusPainted(false);
+		
+		show_bt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			}
+				if(show_bt.getText().equals("금액숨기기")) {
+					printTotal.setVisible(false);
+					show_bt.setText("금액보이기");
+				} else if (show_bt.getText().equals("금액보이기")) {
+					printTotal.setVisible(true);
+					show_bt.setText("금액숨기기");
+				}
+			} 
 		});
-//		JToggleButton hide_tb = new JToggleButton("HIDE");
 
-//		show_tb.setVisible(true);
-//		hide_tb.setVisible(false);
+		show_bt.setFont(new Font("함초롬바탕", Font.PLAIN, 12));
+		show_bt.setBounds(253, 143, 98, 32);
+		calPanel_1.add(show_bt);
 
-		show_tb.setFont(new Font("굴림", Font.PLAIN, 5));
-		show_tb.setBounds(304, 140, 47, 23);
-		show_tb.setToolTipText("금액 보이기");
-		show_tb.setBorderPainted(false);
-//		hide_tb.setFont(new Font("굴림", Font.PLAIN, 5));
-//		hide_tb.setBounds(319, 140, 32, 23);
-//		hide_tb.setToolTipText("금액 숨기기");
-
-
-		calPanel_1.add(show_tb);
-//		calPanel_1.add(hide_tb);
-	
 		
 		JLabel callb = new JLabel("\uC774\uBC88\uB2EC \uC9C0\uCD9C\uCD1D\uC561");
 		callb.setFont(new Font("함초롬바탕", Font.BOLD, 25));
 		callb.setBounds(12, 10, 187, 40);
 		calPanel_1.add(callb);
 		
-		JButton calMoreBtn = new JButton(">");
+		JButton calMoreBtn = new JButton(":");
 		calMoreBtn.setBorderPainted(false);
+		calMoreBtn.setContentAreaFilled(false);
+		calMoreBtn.setFocusPainted(false);
 		calMoreBtn.setFont(new Font("굴림", Font.BOLD, 15));
 		calMoreBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -135,8 +132,28 @@ public class OnionMain {
 		calpane.add(getYear(), BorderLayout.NORTH);
 		calpane.add(getDay(), BorderLayout.CENTER);
 		
+		JLabel wonlb = new JLabel("\uC6D0 / ");
+		wonlb.setHorizontalAlignment(SwingConstants.CENTER);
+		wonlb.setFont(new Font("함초롬바탕", Font.BOLD, 16));
+		wonlb.setBounds(225, 96, 47, 23);
+		calPanel_1.add(wonlb);
+		
+		JLabel cntlb = new JLabel("\uAC74");
+		cntlb.setHorizontalAlignment(SwingConstants.CENTER);
+		cntlb.setFont(new Font("함초롬바탕", Font.BOLD, 16));
+		cntlb.setBounds(314, 96, 25, 23);
+		calPanel_1.add(cntlb);
+		
+		JLabel cnt = new JLabel(Integer.toString(dao.cnt(new subscriptionVo())));
+		cnt.setVerticalAlignment(SwingConstants.BOTTOM);
+		cnt.setHorizontalAlignment(SwingConstants.RIGHT);
+		cnt.setFont(new Font("함초롬바탕", Font.PLAIN, 22));
+		cnt.setBounds(273, 83, 36, 40);
+		calPanel_1.add(cnt);
+		
 		
 		JPanel subPanel = new JPanel();
+		subPanel.setBackground(Color.WHITE);
 		subPanel.setBounds(387, 10, 485, 315);
 		frame.getContentPane().add(subPanel);
 		subPanel.setLayout(null);
@@ -145,29 +162,42 @@ public class OnionMain {
 		sublb.setFont(new Font("함초롬바탕", Font.BOLD, 25));
 		sublb.setBounds(12, 10, 267, 47);
 		subPanel.add(sublb);
-		
-		JButton subMoreBtn = new JButton(">");
-		subMoreBtn.setBorderPainted(false);
-		subMoreBtn.setFont(new Font("굴림", Font.BOLD, 15));
-		subMoreBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		subMoreBtn.setBounds(415, 27, 47, 23);
-		subPanel.add(subMoreBtn);
+	
 		
 		JScrollPane subScrollPane = new JScrollPane();
 		subScrollPane.setBounds(12, 67, 461, 238);
 		subPanel.add(subScrollPane);
 		
-		
-		String[] sHeader = new String[] {"번호","구분","항목"};
-		String[][] sContents = dao.selectSub(new subscriptionVo());
+		String[] sHeader = new String[] {"구분","항목","요금"};
+		Object[][] sContents = dao.selectSub(new subscriptionVo());
 		subTable = new JTable(sContents,sHeader);
+	
+        model = new DefaultTableModel(sContents, sHeader) {
+        	public boolean isCellEditable(int row, int column) {
+        		return false;
+        	}
+        }; 
+      
+        subTable.setModel(model);
+        subTable.getRowCount();
+        subTable.setSelectionBackground(Color.BLUE);
+		subTable.setSelectionForeground(Color.white);
+		subTable.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+                JTable t = (JTable)e.getSource();
+                if(e.getClickCount()==2) {
+                	new dday();
+                	
+                 } 
+             }
+		});
+		
+
 		subScrollPane.setViewportView(subTable);
 		
 	
 		JPanel livPanel = new JPanel();
+		livPanel.setBackground(Color.WHITE);
 		livPanel.setBounds(387, 335, 485, 315);
 		frame.getContentPane().add(livPanel);
 		livPanel.setLayout(null);
@@ -178,28 +208,44 @@ public class OnionMain {
 		livPanel.add(livlb);
 		livlb.setFont(new Font("함초롬바탕", Font.BOLD, 25));
 		
-		JButton livMoreBtn = new JButton(">");
-		livMoreBtn.setBorderPainted(false);
-		livMoreBtn.setFont(new Font("굴림", Font.BOLD, 15));
-		livMoreBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		livMoreBtn.setBounds(416, 27, 57, 23);
-		livPanel.add(livMoreBtn);
 		
 		JScrollPane livScrollPane = new JScrollPane();
 		livScrollPane.setBounds(12, 67, 461, 238);
 		livPanel.add(livScrollPane);
 		
-		String[] lHeader = new String[] {"번호","구분","항목"};
-		String[][] lContents = dao.selectLiv(new subscriptionVo());
+		String[] lHeader = new String[] {"구분","항목","요금"};
+		Object[][] lContents = dao.selectLiv(new subscriptionVo());
 		livTable = new JTable(lContents,lHeader);
-		livScrollPane.setViewportView(livTable);
-		
-		frame.setVisible(true);
+	
+        model1 = new DefaultTableModel(lContents, lHeader) {
+        	public boolean isCellEditable(int row, int column) {
+        		return false;
+        	}
+        }; 
+        
+        livTable.setModel(model1);
+        livTable.getRowCount();
+        livTable.setSelectionBackground(Color.BLUE);
+        livTable.setSelectionForeground(Color.white);
+        livTable.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+                JTable t = (JTable)e.getSource();
+                if(e.getClickCount()==2) {
+                	new dday();
+                	
+                 } 
+             }
+		});
+      
+      
+       livScrollPane.setViewportView(livTable);
+       frame.setVisible(true);
 		
 	}
+
+
+	
+
 	private Panel getYear() {
 		if (yearmenu == null) {
 			label1 = new Label();
@@ -207,6 +253,7 @@ public class OnionMain {
 			label = new Label();
 			label.setText("월");
 			yearmenu = new Panel();
+			yearmenu.setBackground(Color.WHITE);
 			yearmenu.setLayout(new FlowLayout());
 			yearmenu.add(getChoice(), null);
 			yearmenu.add(label1, null);
@@ -216,20 +263,20 @@ public class OnionMain {
 		return yearmenu;
 	}
 
-	/**
-	 * This method initializes panel1	
-	 * 	
-	 * @return java.awt.Panel	
-	 */
+	
 	private Panel getDay() {
 		if (daymenu == null) {
 			daymenu= new Panel();
+			daymenu.setBackground(Color.WHITE);
 			daymenu.setLayout(new GridLayout(7,7));	
-			Button[] bt1 = new Button[7];
+			JLabel[] bt1 = new JLabel[7];
 			String[] day = {"일","월","화","수","목","금","토"};
 			for(int i=0 ; i<7 ; i++){
-				bt1[i] = new Button(day[i]);
+				bt1[i] = new JLabel(day[i]);
+				bt1[i].setHorizontalAlignment(SwingConstants.CENTER);
+				bt1[i].setFont(new Font("함초롬바탕", Font.PLAIN, 12));
 				daymenu.add(bt1[i]);
+				
 			}
 			
 			bt2 = new Button[42];
@@ -237,6 +284,8 @@ public class OnionMain {
 			for(int i=0 ; i<42 ; i++){
 				bt2[i] = new Button("");
 				daymenu.add(bt2[i]);
+				bt2[i].addActionListener(this);
+				bt2[i].setFont(new Font("함초롬바탕", Font.PLAIN, 12));
 			}
 
 			year = Integer.parseInt(choice.getSelectedItem());
@@ -261,11 +310,7 @@ public class OnionMain {
 		}
 		return daymenu;
 	}
-	/**
-	 * This method initializes choice	
-	 * 	
-	 * @return java.awt.Choice	
-	 */
+	
 	private Choice getChoice() {
 		if (choice == null) {
 			choice = new Choice();
@@ -278,11 +323,7 @@ public class OnionMain {
 		return choice;
 	}
 
-	/**
-	 * This method initializes choice1	
-	 * 	
-	 * @return java.awt.Choice	
-	 */
+	
 	@SuppressWarnings("deprecation")
 	private Choice getChoice1() {
 		if (choice1 == null) {
@@ -329,11 +370,51 @@ public class OnionMain {
 			choice1.add("11");
 			choice1.add("12");
 
-			choice1.select(4);
+			choice1.select(6);
 			
 		}
 		return choice1;
 	}
 
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		for(int i=0; i<bt2.length; i++) {
+			paydate = year+"-"+month+"-"+bt2[i].getLabel();
+			if(e.getSource()==bt2[i]) {
+				System.out.println(paydate);
+				
+				new detail();
+			}
+		}
+	}
 }
